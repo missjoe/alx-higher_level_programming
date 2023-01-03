@@ -31,6 +31,7 @@ def placeSquare(row, position, chessboard, N):
         return
     return 1
 
+
 if len(sys.argv) != 2:
     print("Usage: nqueens N")
     sys.exit(1)
