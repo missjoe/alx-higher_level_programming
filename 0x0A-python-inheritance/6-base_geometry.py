@@ -4,7 +4,7 @@
 
 class BaseGeometry:
     """instance of geometry class"""
-    def__init__(self):
+    def __init__(self):
         """initialize class"""
         pass
 
