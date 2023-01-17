@@ -172,4 +172,4 @@ class Base:
                 turt.left(90)
             turt.hideturtle()
 
-g       turtle.exitonclick()
+        turtle.exitonclick()
