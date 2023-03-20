@@ -1,23 +1,41 @@
 #!/usr/bin/python3
-# gets all CITIES
+"""
+This script  takes in the name of a state
+as an argument and lists all cities of that
+state, using the database `hbtn_0e_4_usa`.
+"""
 
+import MySQLdb
+from sys import argv
 
-def main(args):
-    # gets all CITY stuff
-    if len(args) != 5:
-        raise Exception("need 4 arguments!")
-    db = MySQLdb.connect(host='localhost',
-                         user=args[1],
-                         passwd=args[2],
-                         db=args[3])
-    cur = db.cursor()
-    cur.execute("SELECT c.name FROM cities\
-            c JOIN states s ON s.id=c.state_id\
-            WHERE s.name=%s ORDER BY c.id", (args[4],))
-    states = cur.fetchall()
-    print(", ".join(map(lambda x: "%s" % x, states)))
+if __name__ == '__main__':
+    """
+    Access to the database and get the cities
+    from the database.
+    """
 
-if __name__ == "__main__":
-    import sys
-    import MySQLdb
-    main(sys.argv)
+    db = MySQLdb.connect(host="localhost", user=argv[1], port=3306,
+                         passwd=argv[2], db=argv[3])
+
+    with db.cursor() as cur:
+        cur.execute("""
+            SELECT
+                cities.id, cities.name
+            FROM
+                cities
+            JOIN
+                states
+            ON
+                cities.state_id = states.id
+            WHERE
+                states.name LIKE BINARY %(state_name)s
+            ORDER BY
+                cities.id ASC
+        """, {
+            'state_name': argv[4]
+        })
+
+        rows = cur.fetchall()
+
+    if rows is not None:
+        print(", ".join([row[1] for row in rows]))
