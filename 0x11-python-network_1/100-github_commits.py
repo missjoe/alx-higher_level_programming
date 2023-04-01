@@ -1,23 +1,21 @@
 #!/usr/bin/python3
-# requests use
+"""Lists the 10 most recent commits on a given GitHub repository.
+Usage: ./100-github_commits.py <repository name> <repository owner>
+"""
+import sys
 import requests
-from sys import argv
-
-
-def paginate(address):
-    if address is None:
-        return
-    r = requests.get(address).json()
-    for dik in r.get('results'):
-        print(dik.get('name'))
-    return paginate(r.get('next'))
 
 
 if __name__ == "__main__":
-    r = requests.get("https://swapi.co/api/").json().get('people')
-    idsite = "{}?search={}".format(r, argv[1])
-    section = requests.get(idsite).json()
-    print("Number of results: {}".format(section.get('count')))
-    for dik in section.get('results'):
-        print(dik.get('name'))
-    paginate(section.get('next'))
+    url = "https://api.github.com/repos/{}/{}/commits".format(
+        sys.argv[2], sys.argv[1])
+
+    r = requests.get(url)
+    commits = r.json()
+    try:
+        for i in range(10):
+            print("{}: {}".format(
+                commits[i].get("sha"),
+                commits[i].get("commit").get("author").get("name")))
+    except IndexError:
+        pass
