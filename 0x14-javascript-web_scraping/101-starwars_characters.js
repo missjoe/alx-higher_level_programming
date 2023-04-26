@@ -10,7 +10,7 @@ request(url, function (error, response, body) {
     const charactersUrls = JSON.parse(body).characters;
     const charactersNames = [];
 
-    function getCharacterName(characterUrl) {
+    function getCharacterName (characterUrl) {
       request(characterUrl, function (error, response, body) {
         if (error) {
           console.log(error);
